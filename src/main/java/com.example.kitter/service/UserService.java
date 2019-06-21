@@ -30,11 +30,12 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findByUsername(username);
 
-        if(user == null) {
+        if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
         return user;
     }
+
     public boolean addUser(User user) {
         User userFromDb = userRepo.findByUsername(user.getUsername());
 
@@ -54,21 +55,21 @@ public class UserService implements UserDetailsService {
     }
 
     private void sendMessage(User user) {
-        if(!StringUtils.isEmpty(user.getEmail())) {
+        if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
                     "Hello, %s! \n" +
                             "Welcome to Kitter. Please, visit next link: http://localhost:8080/activate/%s",
                     user.getUsername(),
                     user.getActivationCode()
             );
-            mailSender.send(user.getEmail(), "Activation code", message );
+            mailSender.send(user.getEmail(), "Activation code", message);
         }
     }
 
     public boolean activateUser(String code) {
-        User user =  userRepo.findByActivationCode(code);
+        User user = userRepo.findByActivationCode(code);
 
-        if (user == null ) {
+        if (user == null) {
             return false;
         }
 
@@ -112,12 +113,22 @@ public class UserService implements UserDetailsService {
         if (!StringUtils.isEmpty(email)) {
             user.setActivationCode(UUID.randomUUID().toString());
         }
-        if (!StringUtils.isEmpty(password)){
+        if (!StringUtils.isEmpty(password)) {
             user.setPassword(passwordEncoder.encode(password));
         }
         userRepo.save(user);
-        if(isEmailChanged){
-        sendMessage(user);
+        if (isEmailChanged) {
+            sendMessage(user);
         }
+    }
+
+    public void subscribe(User currentUser, User user) {
+        user.getSubscribers().add(currentUser);
+        userRepo.save(user);
+    }
+
+    public void unsubscribe(User currentUser, User user) {
+        user.getSubscribers().remove(currentUser);
+        userRepo.save(user);
     }
 }

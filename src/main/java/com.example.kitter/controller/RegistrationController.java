@@ -32,7 +32,7 @@ public class RegistrationController {
     private RestTemplate restTemplate;
 
     @GetMapping("/registration")
-    public String registration(){
+    public String registration() {
         return "registration";
     }
 
@@ -57,11 +57,11 @@ public class RegistrationController {
             model.addAttribute("password2Error", "Password confirmation cannot be empty");
         }
 
-        if (user.getPassword() != null && !user.getPassword().equals(passwordConfirm)){
+        if (user.getPassword() != null && !user.getPassword().equals(passwordConfirm)) {
             model.addAttribute("passwordError", "Passwords are different");
         }
 
-        if (isConfirmEmpty || bindingResult.hasErrors() || !response.isSuccess()){
+        if (isConfirmEmpty || bindingResult.hasErrors() || !response.isSuccess()) {
             Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
 
             model.mergeAttributes(errors);
@@ -85,7 +85,7 @@ public class RegistrationController {
             model.addAttribute("message", "User successfully activated");
         } else {
             model.addAttribute("messageType", "danger");
-            model.addAttribute("message", "Activation code is not found" );
+            model.addAttribute("message", "Activation code is not found");
         }
 
         return "login";

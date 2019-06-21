@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 public class Message {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank(message = "Please fill the message")
@@ -23,7 +23,7 @@ public class Message {
 
     private String filename;
 
-    public Message(){
+    public Message() {
     }
 
     public Message(String text, String tag, User user) {
@@ -32,7 +32,7 @@ public class Message {
         this.tag = tag;
     }
 
-    public String getAuthorName(){
+    public String getAuthorName() {
         return author != null ? author.getUsername() : "<none>";
     }
 
